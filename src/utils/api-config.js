@@ -1,10 +1,6 @@
-// const server = 'http://localhost:8081/';
- //const server = 'http://web.ngrok.cutrain.top:8081/';
-//const server = "https://easy-mock.com/mock/5c7fb3586498b753ed1f9cd0/vap/";
-//const site = window.location.origin;
-//const server = site.substr(0, site.length-5) + ':8081/';
-const server = 'http://10.141.209.225:8081/';
-
+const site = window.location.origin;
+const server = site.substr(0, site.length-4) + '8081/';
+console.log(server);
 
 
 const api = {
