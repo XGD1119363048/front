@@ -71,6 +71,12 @@
           xlink:href="#icon-daorumoxing30"
           v-else-if="model.icon_type === 'model'"></use>
         <use
+          xlink:href="#icon-text-blank"
+          v-else-if="model.icon_type === 'text'"></use>
+        <use
+          xlink:href="#icon-sequence"
+          v-else-if="model.icon_type === 'seq'"></use>
+        <use
           xlink:href="#icon-moshubang"
           v-else></use>
       </svg>

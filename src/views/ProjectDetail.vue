@@ -35,17 +35,7 @@
              version="1.1"
              xmlns="http://www.w3.org/2000/svg"
              style="position:absolute;top:0;left:0;"
-        ><!-- pointer-events: none;-->
-          <!--<line class="line"
-                v-for="(item, index) in line_items"
-                :id="item.id"
-                :key="index"
-                :x1="item.x1"
-                :y1="item.y1"
-                :x2="item.x2"
-                :y2="item.y2"
-          >
-          </line>-->
+        >
         </svg>
 
         <el-scrollbar id="scrollBar-dragResize"
@@ -76,8 +66,9 @@
               v-bind:node_show_detail_box.sync="node_show_detail_box"
               v-bind:node_show_data_box.sync="node_show_data_box"
               v-bind:tableInBorder.sync="tableInBorder"
+              v-bind:tableSeqInBorder.sync="tableSeqInBorder"
               v-bind:imageInBorder.sync="imageInBorder"
-              v-bind:stringInBorder.sync="stringInBorder"
+              v-bind:textInBorder.sync="textInBorder"
               v-bind:addressInBorder.sync="addressInBorder"
               v-bind:dataTypeInBorder.sync="dataTypeInBorder"
               :key="index"
@@ -207,7 +198,17 @@
                                width="150"
               ></el-table-column>
             </el-table>
-            <div v-else-if="dataTypeInBorder === 'String'">{{stringInBorder}}</div>
+            <el-table :data="tableSeqInBorder.data"
+                      style="width: 100%"
+                      v-else-if="dataTypeInBorder === 'Sequence'">
+              <el-table-column v-for="(item, index) in tableSeqInBorder.title"
+                               :key="index"
+                               :prop="item"
+                               :label="item"
+                               width="150"
+              ></el-table-column>
+            </el-table>
+            <div v-else-if="dataTypeInBorder === 'Text'">{{textInBorder}}</div>
             <div v-else-if="dataTypeInBorder === 'Image'">
               <p>{{imageInBorder.shape}}</p>
               <el-scrollbar view-class="view-box" :native="false" style="height: 100%;">
@@ -316,9 +317,10 @@
       return {
         server: api.server,             //'http://10.141.2.231:8081/'
         dataTypeInBorder: '',           // border: about data view
-        stringInBorder: '',
+        textInBorder: '',
         addressInBorder: '',
         imageInBorder: {},
+        tableSeqInBorder: {},
         tableInBorder: {},              // { 'title': [ 'head1' , 'head2' ], 'data': [{ 'head1': 1, 'head2': 'a' }, { 'head1': 7, 'head2': 'b' }, { 'head1': 8, 'head2': 'c' }]}
         sum: 1,                         // 节点总数。无父节点，填0，故需从1开始编号
         levelNum: [],                   // 每层节点总数，从0开始(0,1,2,...)

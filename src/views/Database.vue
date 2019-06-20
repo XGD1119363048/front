@@ -51,7 +51,7 @@
                          :key="index">
         </el-table-column>
       </el-table>
-      <div v-show="StringVisible">{{stringGet}}</div>
+      <div v-show="TextVisible">{{textGet}}</div>
       <div v-show="ImageVisible">
         <p>Shape: {{image_shape[0]}}X{{image_shape[1]}}X{{image_shape[2]}}</p>
         <el-scrollbar view-class="view-box" :native="false" style="height: 100%;">
@@ -74,6 +74,14 @@
       <div v-show="GraphVisible">
         <p>当前类型不支持查看，请下载</p>
       </div>
+      <el-table :data="gridData.data"
+                v-show="SequenceVisible">
+        <el-table-column v-for="(item, index) in gridData.title"
+                         :label="item"
+                         :prop="item"
+                         :key="index">
+        </el-table-column>
+      </el-table>
 
     </el-dialog>
     <br/>
@@ -102,7 +110,6 @@
   import * as axios from "axios";
   import dragTreeTable from "../components/dragTreeTable";
   import api from '../utils/api-config.js';
-  import { Loading } from 'element-ui';
 
   export default {
     name: "database",
@@ -117,6 +124,7 @@
         curr_file_id: 0,                              // 单选：选中节点id, id从1开始
         levelNum: [],                                 // 每层节点总数，从0开始(0,1,2,...)
         gridData:  [],                                // "查看"弹出对话框
+
         col_num: 0,                                   // DataFrame类型返回参数
         col_index: [],
         col_type: [],
@@ -124,15 +132,16 @@
         loadingVisible: false,
         imageUrl: '',                                 // Image类型返回参数
         image_shape: [],
-        stringGet: '',                                // String类型返回参数
+        textGet: '',                                  // Text类型返回参数
         videoDownload: '',
         graphDownload: '',
         dialogTableVisible: false,
         DataFrameVisible: false,
-        StringVisible: false,
+        TextVisible: false,
         ImageVisible: false,
         VideoVisible: false,
         GraphVisible: false,
+        SequenceVisible: false,
         dialogTableUploadVisible: false,
         dragId: '',
         selectDataset: '/',                           // 上传：选择目录，即选中的数据集
@@ -239,9 +248,9 @@
         }
       },
 
-      StringVisible(newValue, oldValue) {
+      TextVisible(newValue, oldValue) {
         if (newValue === false) {
-          this.stringGet = null;
+          this.textGet = null;
         }
       },
     },
@@ -618,12 +627,13 @@
         return datasetName;
       },
 
-      setVisible(dataFrame, string, image, video, graph) {
+      setVisible(dataFrame, text, image, video, graph, sequence) {
         this.DataFrameVisible = dataFrame;
-        this.StringVisible = string;
+        this.TextVisible = text;
         this.ImageVisible = image;
         this.VideoVisible = video;
         this.GraphVisible = graph;
+        this.SequenceVisible = sequence;
       },
 
       setLoadingVisible(flag) {
@@ -636,37 +646,24 @@
         console.log('------------------');
         console.log(item);
 
+        let path = '';
+        if (datasetName === '') {
+          path = item.name;
+        } else {
+          path = datasetName + '/' + item.name;
+        }
+
         let dataPost = JSON.stringify({
           dataset: datasetName,
-          name: item.name
+          name: item.name,
         });
 
         this.image_shape = [];
         this.imageUrl = '';
-        this.stringGet = '';
+        this.textGet = '';
+        this.sequenceGet = '';
         this.videoDownload = '';
         this.graphDownload = '';
-
-        /*const loading = this.$loading({
-          lock: false,
-          text: 'Loading',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        });
-        setTimeout(() => {
-          loading.close();
-        }, 2000);*/
-/*
-        let options = {
-          lock: false,
-          text: 'Loading',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        };
-        let loadingInstance = this.$loading(options);//Loading.service(options); //
-        this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
-          loadingInstance.close();
-        }, 2000);*/
 
         axios.post(this.$api.dataGet, dataPost)
           .then(res => {
@@ -679,24 +676,28 @@
               console.log(res.type);
               switch (res.type) {
                 case 'DataFrame':
-                  this.setVisible(true, false, false, false, false);
+                  this.setVisible(true, false, false, false, false, false);
 
                   let table = {};
                   let data = [], title = [];
                   if (res.row_num > 0) {
-                    let row = res.row_num;
+                    let len = res.data;
+                    let row = res.row_num > len.length ? len.length : res.row_num;
                     let col = res.col_num;
                     for (let i = 0;i < res.col_index.length;++ i) {
                       let value = res.col_index[i] + '(' + res.col_type[i] + ')';
                       title.push(value);
                     }
                     res = res.data;
-                    console.log(res);
                     for (let i=0;i < row; ++i) {
                       let rowValue = {};
                       for (let j=0;j < col; ++j) {
                         let key = title[j];
-                        rowValue[key] = res[i][j];
+                        if (col === 1) {
+                          rowValue[key] = res[i];
+                        } else if (col > 1) {
+                          rowValue[key] = res[i][j];
+                        }
                       }
                       data.push(rowValue);
                     }
@@ -707,12 +708,12 @@
                   table[key] = data;
                   this.gridData = table;
                   break;
-                case 'String':
-                  this.setVisible(false, true, false, false, false);
-                  this.stringGet = res.data;
+                case 'Text':
+                  this.setVisible(false, true, false, false, false, false);
+                  this.textGet = res.data;
                   break;
                 case 'Image':
-                  this.setVisible(false, false, true, false, false);
+                  this.setVisible(false, false, true, false, false, false);
                   this.imageUrl = res.data.url;
                   console.log(res.data.url);
                   this.image_shape = res.data.shape;
@@ -721,14 +722,36 @@
                   }
                   break;
                 case 'Video':
-                  this.setVisible(false, false, false, true, false);
+                  this.setVisible(false, false, false, true, false, false);
                   this.videoDownload = res.data;
-                  // TODO:
                   break;
                 case 'Graph':
-                  this.setVisible(false, false, false, false, true);
-                  // TODO:
+                  this.setVisible(false, false, false, false, true, false);
                   this.graphDownload = res.data;
+                  break;
+                case 'Sequence':
+                  this.setVisible(false, false, false, false, false, true);
+                  table = {};
+                  data = []; title = [];
+                  title.push('sequence');
+                  let row = res.len;
+                  if (row > 0) {
+                    res = res.data;
+                    for (let i=0;i < row; ++i) {
+                      let rowValue = {};
+                      for (let j=0;j < title.length; ++j) {
+                        let key = title[j];
+                        rowValue[key] = JSON.stringify(res[i]);
+                      }
+                      data.push(rowValue);
+                    }
+                  }
+                  key = 'title';
+                  table[key] = title;
+                  key = 'data';
+                  table[key] = data;
+                  console.log(table);
+                  this.gridData = table;
                   break;
                 default:
                   this.$message({
@@ -751,7 +774,6 @@
           .catch(() => {});
       },
 
-      // TODO: fix delete bug. error path
       fileOrFolderDelete(item) { // 删除
         this.$confirm('确认删除数据，是否继续？','提示', {
           confirmButtonText: '确定',
@@ -838,65 +860,23 @@
         formDataPost.append('dataset',path);
         // console.log(formDataPost.getAll('dataset'));
 
+
         axios.request({
           url: this.$api.dataUpload,
           method: 'post',
           data: formDataPost,
           onUploadProgress: (progressEvent) => {
-            const complete = (progressEvent.loaded / progressEvent.total * 100 | 0);
-            console.log(complete);
-            param.onProgress({ percent : complete})
+            if(progressEvent.lengthComputable) {
+              const complete = (progressEvent.loaded / progressEvent.total * 100 | 0);
+              console.log(complete);
+              param.onProgress({ percent : complete, status : 'success'})
+              //console.log('------------');
+              //console.log(param.onProgress().argument);
+            }
           },
           timeout: undefined,
         })
           .then(this.handleUpload, this.handleUploadError);
-        /*axios.post(this.$api.dataUpload, formDataPost, {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          },
-          /!*progress: function (event) {
-            console.log("===========1");
-            console.log(event.loaded);
-            console.log(event.total);
-            param.file.percent = event.loaded/event.total*100;
-            console.log("===========");
-            console.log(param.file.percent);
-            param.onProgress(param.file)
-          }*!/
-        })
-          .then(res => {
-            res = res.data;
-            if (res.succeed === 0) {
-              this.$message({
-                message: "上传成功！" + res.message,
-                type: "success",
-                showClose: true,
-                duration: "1000"
-              });
-              this.fileList.push({name:param.file.name,dataset:path});
-              console.log('---------upload------------');
-              console.log(this.fileList);
-              /!*console.log("++++++++++++++");
-              console.log(param);
-              param.data.list.push({
-                name: param.file.name,
-                status: 'success',
-                uid: new Date().getTime(),
-              });
-              console.log(param.data.list);
-              console.log("++++++++++++++");*!/
-              this.draggableDataView();
-            } else {
-              this.$message({
-                message: "上传失败！" + res.message,
-                type: "error",
-                showClose: true,
-                duration: "2000"
-              });
-              console.log(res.message);
-            }
-          })
-          .catch(() => {});*/
         console.log(this.fileList);
       },
 
@@ -909,10 +889,6 @@
             showClose: true,
             duration: "1000"
           });
-          /*this.fileList.push({name:param.file.name,dataset:path});
-          console.log('---------upload------------');
-          console.log(this.fileList);
-          console.log(param);*/
           this.draggableDataView();
         } else {
           this.$message({

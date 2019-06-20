@@ -33,6 +33,10 @@
              v-else-if="node.icon_type === 'clustering'"></use>
         <use xlink:href="#icon-daorumoxing30"
              v-else-if="node.icon_type === 'model'"></use>
+        <use xlink:href="#icon-text-blank"
+             v-else-if="node.icon_type === 'text'"></use>
+        <use xlink:href="#icon-sequence"
+             v-else-if="node.icon_type === 'seq'"></use>
         <use xlink:href="#icon-moshubang"
              v-else></use>
       </svg>
@@ -62,7 +66,7 @@
   import * as axios from "axios";
   export default {
     name: "node",
-    props: ['project_id', 'select_id', 'drag_data', 'G', 'type_detail', 'id', 'node', 'show_detail_box', 'show_data_box', 'show_button_lists', 'dataTypeInBorder', 'imageInBorder', 'stringInBorder', 'addressInBorder'],
+    props: ['project_id', 'select_id', 'drag_data', 'G', 'type_detail', 'id', 'node', 'show_detail_box', 'show_data_box', 'show_button_lists', 'dataTypeInBorder', 'tableSeqInBorder', 'tableInBorder', 'imageInBorder', 'textInBorder', 'addressInBorder'],
     components: {
       circleDraggable
     },
@@ -275,7 +279,8 @@
         key = 'data';
         table[key] = data;
         this.$emit('update:tableInBorder', table);
-        this.$emit('update:stringInBorder', '正在读取...');
+        this.$emit('update:tableSeqInBorder', table);
+        this.$emit('update:textInBorder', '正在读取...');
         this.$emit('update:imageInBorder', {url:'',shape:''});
         this.$emit('update:addressInBorder','');
 
@@ -298,19 +303,25 @@
                 let table = {};
                 let data = [], title = [];
                 if (show.row_num > 0) {
-                  let row = show.row_num;
+                  let len = show.data; // 默认返回show.row_num行, 实际行数len.length若小于默认值, 返回默认值
+                  let row = show.row_num > len.length ? len.length : show.row_num;
                   let col = show.col_num;
                   for (let i = 0;i < show.col_index.length;++ i) {
                     let value = show.col_index[i] + '(' + show.col_type[i] + ')';
                     title.push(value);
                   }
+                  console.log('title: ', title);
                   show = show.data;
                   console.log(show);
                   for (let i=0;i < row; ++i) {
                     let rowValue = {};
                     for (let j=0;j < col; ++j) {
                       let key = title[j];
-                      rowValue[key] = show[i][j];
+                      if (col === 1) {
+                        rowValue[key] = show[i];
+                      } else if (col > 1) {
+                        rowValue[key] = show[i][j];
+                      }
                     }
                     data.push(rowValue);
                   }
@@ -337,15 +348,42 @@
                 this.$emit('update:imageInBorder', image);
                 this.$emit('update:dataTypeInBorder', 'Image');
               }
-              else if (show.type == 'String') {
-                let str = show.value;
-                this.$emit('update:stringInBorder', str);
-                this.$emit('update:dataTypeInBorder', 'String');
+              else if (show.type == 'Text') {
+                let str = show.data;
+                console.log('str:', str);
+                console.log('text:', show);
+                this.$emit('update:textInBorder', str);
+                this.$emit('update:dataTypeInBorder', 'Text');
               }
               else if (show.type == 'Video' || show.type == 'Graph') {
                 let addr = show.value; //TODO: 确认
                 this.$emit('update:addressInBorder', addr);
                 this.$emit('update:dataTypeInBorder', 'Address');
+              }
+              else if (show.type == 'Sequence') {
+                let table = {};
+                let data = [], title = [];
+                title.push('sequence');
+                let row = show.len;
+                if (row > 0) {
+                  show = show.data;
+                  console.log(show);
+                  for (let i=0;i < row; ++i) {
+                    let rowValue = {};
+                    for (let j=0;j < title.length; ++j) {
+                      let key = title[j];
+                      rowValue[key] = JSON.stringify(show[i]);
+                    }
+                    data.push(rowValue);
+                  }
+                }
+                let key = 'title';
+                table[key] = title;
+                key = 'data';
+                table[key] = data;
+
+                this.$emit('update:tableSeqInBorder', table);
+                this.$emit('update:dataTypeInBorder', 'Sequence');
               }
               else {
                 alert('type ' + ret.type + ' not implemented');
