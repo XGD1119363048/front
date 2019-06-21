@@ -110,6 +110,7 @@
   import * as axios from "axios";
   import dragTreeTable from "../components/dragTreeTable";
   import api from '../utils/api-config.js';
+  import "@/assets/js/iconfont.js"
 
   export default {
     name: "database",

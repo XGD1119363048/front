@@ -87,6 +87,7 @@
 </template>
 <script>
   import $ from 'jquery';
+  import "@/assets/js/iconfont.js"
   export default {
     name: "componentDraggable",
     props: ['drag_data', 'model', 'node_items', 'depth', 'padding'],
