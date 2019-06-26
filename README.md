@@ -22,6 +22,8 @@ npm run build --report
 
 ## Structure
 
+![structure](https://github.com/yjwang12/front/blob/master/src/assets/readme-structure.png)
+
 ### components 
 > vue components, location: /src/components/xxx.vue 
 - draggable components
