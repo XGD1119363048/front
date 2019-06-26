@@ -125,7 +125,6 @@
         curr_file_id: 0,                              // 单选：选中节点id, id从1开始
         levelNum: [],                                 // 每层节点总数，从0开始(0,1,2,...)
         gridData:  [],                                // "查看"弹出对话框
-
         col_num: 0,                                   // DataFrame类型返回参数
         col_index: [],
         col_type: [],
@@ -324,23 +323,6 @@
             if (typeof structure === 'object' && typeof structure !== 'number') { // object对象
               let preName = [];
               dataViewTransform(structure, dataTemple, preName);
-              // console.log(dataTemple);
-              /*for (let key in structure) {
-                if (structure.hasOwnProperty(key)) {
-                  console.log(key);
-                  console.log(structure[key]);
-                  let obj = structure[key];
-                  for (let i in obj) {
-                    if (obj.hasOwnProperty(i)) {
-                      console.log(i);
-                      console.log(obj[i]);
-                      if(typeof obj[i] ===  'number') {
-                        console.log('yes');
-                      }
-                    }
-                  }
-                }
-              }*/
             }
             let dataT = [];
             let len = dataTemple.length;
@@ -537,7 +519,6 @@
             } else {
               dataset = item.name + '/' + value + '/';
             }
-            // console.log('dataset: ', dataset);
 
             let dataPost = JSON.stringify({
               dataset: dataset,

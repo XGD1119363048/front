@@ -1303,7 +1303,6 @@
       },
 
       run_button() {
-        // TODO : 前端加入運行按鈕，並測試
         // 判断是否有仍然在运行的节点
         if (!this.finished) {
           this.$message({

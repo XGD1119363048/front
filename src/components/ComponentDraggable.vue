@@ -159,13 +159,6 @@
           this.model.open = !this.model.open
         }
       },
-
-      getIconType(icon_type) {
-        switch (icon_type) {
-          case 1:
-
-        }
-      },
     }
   }
 </script>

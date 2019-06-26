@@ -244,8 +244,6 @@
                   duration: "1000"
                 })
               } else {
-                //console.log(newList);
-                // console.log(window.dragId);
                 this.$message({
                   message: "移动文件/文件夹失败" + res.message,
                   type: "error",

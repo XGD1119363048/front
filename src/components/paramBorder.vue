@@ -1,13 +1,5 @@
 <template>
   <div>
-    <!-- v-model=? -->
-    <!--<el-input-->
-      <!--v-show="border.bt.type === 'file'"-->
-      <!--:id="border.bt.id"-->
-      <!--:style="{order: border.bt.order}"-->
-      <!--v-bind:change="file_name()"-->
-      <!--type="file">-->
-    <!--</el-input>-->
 
     <el-input v-show="border.value.data_type === 'text'"
               v-bind:class="[border.value.data_type === 'text' ? 'param-value' : 'param-value-inactive']"

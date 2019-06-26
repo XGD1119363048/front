@@ -1,8 +1,8 @@
 {
   "name": "test_front",
   "version": "1.0.0",
-  "description": "A Vue.js project",
-  "author": "wyj",
+  "description": "A Vue.js project for the visual analysis platform (details and code are as follow: https://github.com/cutrain/visual-analysis-platform).",
+  "author": "yjwang",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

@@ -72,11 +72,7 @@
             'title': '优选数据挖掘算法',
             'content': '多种类型的经典算法，一应俱全。',
             'id': 2
-          },/*{
-            'title': '实现数据挖掘的全过程',
-            'content': '支持对数据库文件的导入、基本操作，对训练数据的预处理等操作。',
-            'id': 3
-          },*/{
+          },{
             'title': '轻松管理项目、数据',
             'content': '轻松管理生成的项目、导入平台的数据，如拖拽移动数据集等。',
             'id': 3
@@ -125,12 +121,4 @@
     margin: 0;
 
   }
-
-  /*.el-carousel__item:nth-child(2n) {
-    background-color: #c0d1e7;
-  }
-
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #e4edf7;
-  }*/
 </style>
