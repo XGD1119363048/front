@@ -2,7 +2,7 @@
 
 > A Vue.js project for the visual analysis platform 
 > whose details and code are as follow: 
-> https://github.com/cutrain/visual-analysis-platform.
+> [here](https://github.com/cutrain/visual-analysis-platform).
 
 ## Build Setup
 
