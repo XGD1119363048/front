@@ -69,6 +69,7 @@
               v-bind:tableSeqInBorder.sync="tableSeqInBorder"
               v-bind:imageInBorder.sync="imageInBorder"
               v-bind:textInBorder.sync="textInBorder"
+              v-bind:graphInBorder.sync="graphInBorder"
               v-bind:addressInBorder.sync="addressInBorder"
               v-bind:dataTypeInBorder.sync="dataTypeInBorder"
               :key="index"
@@ -209,6 +210,7 @@
               ></el-table-column>
             </el-table>
             <div v-else-if="dataTypeInBorder === 'Text'">{{textInBorder}}</div>
+            <div v-else-if="dataTypeInBorder === 'Graph'">{{graphInBorder}}</div>
             <div v-else-if="dataTypeInBorder === 'Image'">
               <p>{{imageInBorder.shape}}</p>
               <el-scrollbar view-class="view-box" :native="false" style="height: 100%;">
@@ -319,6 +321,7 @@
         server: api.server,             //'http://10.141.2.231:8081/'
         dataTypeInBorder: '',           // border: about data view
         textInBorder: '',
+        graphInBorder: '',
         addressInBorder: '',
         imageInBorder: {url:'loading',shape:''},
         tableSeqInBorder: {},

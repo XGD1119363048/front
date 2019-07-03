@@ -72,7 +72,7 @@
         <p>当前类型不支持查看，请下载</p>
       </div>
       <div v-show="GraphVisible">
-        <p>当前类型不支持查看，请下载</p>
+        {{graphDownload}}
       </div>
       <el-table :data="gridData.data"
                 v-show="SequenceVisible">
@@ -253,6 +253,12 @@
           this.textGet = null;
         }
       },
+
+      GraphVisible(newValue, oldValue) {
+        if (newValue === false) {
+          this.graphDownload = null;
+        }
+      }
     },
     methods: {
 // ======================================================== view =======================================================

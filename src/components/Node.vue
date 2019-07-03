@@ -66,7 +66,7 @@
   import * as axios from "axios";
   export default {
     name: "node",
-    props: ['project_id', 'select_id', 'drag_data', 'G', 'type_detail', 'id', 'node', 'show_detail_box', 'show_data_box', 'show_button_lists', 'dataTypeInBorder', 'tableSeqInBorder', 'tableInBorder', 'imageInBorder', 'textInBorder', 'addressInBorder'],
+    props: ['project_id', 'select_id', 'drag_data', 'G', 'type_detail', 'id', 'node', 'show_detail_box', 'show_data_box', 'show_button_lists', 'dataTypeInBorder', 'tableSeqInBorder', 'tableInBorder', 'imageInBorder', 'graphInBorder', 'textInBorder', 'addressInBorder'],
     components: {
       circleDraggable
     },
@@ -281,6 +281,7 @@
         this.$emit('update:tableInBorder', table);
         this.$emit('update:tableSeqInBorder', table);
         this.$emit('update:textInBorder', '正在读取...');
+        this.$emit('update:graphInBorder', '正在读取...');
         this.$emit('update:imageInBorder', {'url':'loading','shape':''});
         this.$emit('update:addressInBorder','');
 
@@ -354,7 +355,12 @@
                 this.$emit('update:textInBorder', str);
                 this.$emit('update:dataTypeInBorder', 'Text');
               }
-              else if (show.type == 'Video' || show.type == 'Graph') {
+              else if (show.type == 'Graph') {
+                let str = show.data;
+                this.$emit('update:graphInBorder', str);
+                this.$emit('update:dataTypeInBorder', 'Graph');
+              }
+              else if (show.type == 'Video') {
                 let addr = show.value; //TODO: 确认
                 this.$emit('update:addressInBorder', addr);
                 this.$emit('update:dataTypeInBorder', 'Address');
