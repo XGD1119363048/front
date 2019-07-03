@@ -281,7 +281,7 @@
         this.$emit('update:tableInBorder', table);
         this.$emit('update:tableSeqInBorder', table);
         this.$emit('update:textInBorder', '正在读取...');
-        this.$emit('update:imageInBorder', {url:'',shape:''});
+        this.$emit('update:imageInBorder', {'url':'loading','shape':''});
         this.$emit('update:addressInBorder','');
 
         let $detail_top = $("<div class='detail-top' style='order:0;'>属性</div>")
@@ -289,7 +289,6 @@
           "project_id": this.project_id,
           "node_id": id
         });
-
         axios.post(this.$api.graphSample, dataPost)
           .then(ret => {
             ret = ret.data;

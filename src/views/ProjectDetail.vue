@@ -212,8 +212,9 @@
             <div v-else-if="dataTypeInBorder === 'Image'">
               <p>{{imageInBorder.shape}}</p>
               <el-scrollbar view-class="view-box" :native="false" style="height: 100%;">
-                <div v-if="imageInBorder.url !== ''">
+                <div v-if="imageInBorder.url !== undefined && imageInBorder.url !== 'loading'">
                   <img :src="server+imageInBorder.url"
+                       onerror=""
                        draggable="false"/>
                 </div>
                 <div v-else>
@@ -319,7 +320,7 @@
         dataTypeInBorder: '',           // border: about data view
         textInBorder: '',
         addressInBorder: '',
-        imageInBorder: {},
+        imageInBorder: {url:'loading',shape:''},
         tableSeqInBorder: {},
         tableInBorder: {},              // { 'title': [ 'head1' , 'head2' ], 'data': [{ 'head1': 1, 'head2': 'a' }, { 'head1': 7, 'head2': 'b' }, { 'head1': 8, 'head2': 'c' }]}
         sum: 1,                         // 节点总数。无父节点，填0，故需从1开始编号
@@ -464,7 +465,7 @@
 
       dataTypeInBorder(newValue) {
         if (newValue === 'Image') {
-          this.imageInBorder = {};
+          this.imageInBorder = {url:'loading',shape:''};
         }
 
       },
@@ -1048,6 +1049,17 @@
       console.log('-----------------------------');
     },
     methods: {
+
+      CheckImgExists(imgurl) {
+        let ImgObj = new Image();
+        ImgObj.src = imgurl;
+        if (ImgObj.width > 0 && ImgObj.height > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+
 
 // ====================================================== buttons ======================================================
       load_button() {
