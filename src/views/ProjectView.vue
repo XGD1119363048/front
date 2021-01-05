@@ -166,27 +166,32 @@
         },
 
         projectCreate() {
-          let name = this.getDefaultFileName();
-          let dataPost = JSON.stringify({
-            project_name: name
-          });
-
-          axios.post(this.$api.projectCreate, dataPost)
-            .then(res => {
-              if (res.data.succeed === 0) {
-                this.projectView();
-                // route
-                // this.$router.push({path:"/index/graphNew", params: {project_id: id}});
-              } else {
-                this.$message({
-                  message: "创建项目失败！" + res.message,
-                  type: "error",
-                  showClose: true,
-                  duration: "2000"
-                })
-              }
-            })
-            .catch(err => {});
+          this.$prompt('请输入新项目名称', '创建项目', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputValue: ''
+          }).then(({ value }) => {
+            let dataPost = JSON.stringify({
+              project_name: value
+            });
+            axios.post(this.$api.projectCreate, dataPost)
+              .then(res => {
+                if (res.data.succeed === 0) {
+                  this.projectView();
+                  // route
+                  // this.$router.push({path:"/index/graphNew", params: {project_id: id}});
+                } else {
+                  this.$message({
+                    message: "创建项目失败！" + res.message,
+                    type: "error",
+                    showClose: true,
+                    duration: "2000"
+                  })
+                }
+              })
+              .catch(err => {});
+          }).catch(() => {})
+          //let name = this.getDefaultFileName();
         },
 
 // ==================================================== table style ====================================================

@@ -9,10 +9,20 @@
     <div class="right">
       <h1>{{ msg }}</h1>
       <div class="right-bottom">
-        <el-button id="toIndex_button" @click="toLogin" round type="primary">
+        <el-button id="toIndex_button" @click="btnClick1" round type="primary">
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-jinru"></use>
-          </svg> 登录
+          </svg> Platfrom1
+        </el-button>
+        <el-button id="toIndex_button" @click="btnClick2" round type="primary">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-jinru"></use>
+          </svg> Platfrom2
+        </el-button>
+        <el-button id="toIndex_button" @click="btnClick3" round type="primary">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-jinru"></use>
+          </svg> Platfrom3
         </el-button>
       </div>
     </div>
@@ -28,8 +38,14 @@
       }
     },
     methods: {
-      toLogin() {
-        this.$router.push('/Login');
+      btnClick1() {
+        this.$router.push('/index/projectView');
+      },
+      btnClick2() { // platfrom2 push
+
+      },
+      btnClick3() { // platform3 push
+
       }
     }
   }

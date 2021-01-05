@@ -10,16 +10,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    /*proxyTable: {
-      '/component': {
-        target: ,//'10.141.245.36:8081',
-        // secure: true, // https接口，需配置
-        changeOrigin: true, // 跨域接口，需配置
-        pathRewrite: {
-          '^/': '/'
-        }
-      }
-    },*/
+    // proxyTable: {
+    //   '/component': {
+    //     target: '10.176.38.225:8089',//'10.141.245.36:8081',
+    //     // secure: true, // https接口，需配置
+    //     changeOrigin: true, // 跨域接口，需配置
+    //     pathRewrite: {
+    //       '^/': '/'
+    //     }
+    //   }
+    // },
 
     // Various Dev Server settings
     host: '0.0.0.0',//'10.141.245.36' // 'localhost', // can be overwritten by process.env.HOST

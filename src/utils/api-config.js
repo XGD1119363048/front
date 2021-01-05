@@ -1,5 +1,6 @@
 const site = window.location.origin;
-const server = site.substr(0, site.length-4) + '8081/';
+// const server = site.substr(0, site.length-4) + '8081/';
+const server = 'http://10.176.38.225:8089/'
 //const server = 'http://10.141.2.231:8081/';
 console.log(server);
 
